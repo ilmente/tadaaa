@@ -10,7 +10,8 @@
   "scripts": {
     "dev": "tsc -w",
     "build": "rollup --config --environment BUILD:production",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand",
+    "prepare": "rollup --config --environment BUILD:production"
   },
   "devDependencies": {
     "@babel/core": "~7.19.3",
