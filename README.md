@@ -59,18 +59,18 @@ Let's break it down. The `throttle` function takes 2 parameters:
 ```ts
 interface ThrottleOptions<
     E extends EventOnLeadingEdgeType
->{
-  delay?: number;
-  leading?: E;
-  onError?: RunnerErrorHandler,
+> {
+    delay?: number;
+    leading?: E;
+    onError?: RunnerErrorHandler,
 }
 
 export function throttle<
     H extends EventHandler = any,
     E extends EventOnLeadingEdgeType = undefined
->(
-  handler: H,
-  options?: ThrottleOptions<E>
+> (
+    handler: H,
+    options?: ThrottleOptions<E>
 ) {}
 ```
 
@@ -119,20 +119,20 @@ Let's break it down. The `debounce` function takes 2 parameters:
 ```ts
 export interface DebounceOptions<
     E extends EventOnLeadingEdgeType
->{
-  delay?: number;
-  leading?: E;
-  timeout?: number;
-  onTimeout?: RunnerErrorHandler,
-  onError?: RunnerErrorHandler,
+> {
+    delay?: number;
+    leading?: E;
+    timeout?: number;
+    onTimeout?: RunnerErrorHandler,
+    onError?: RunnerErrorHandler,
 }
 
 export function debounce<
     H extends EventHandler = any,
     E extends EventOnLeadingEdgeType = undefined
->(
-  handler: H,
-  options?: DebounceOptions<E>
+> (
+    handler: H,
+    options?: DebounceOptions<E>
 ) {}
 ```
 
