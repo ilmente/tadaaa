@@ -22,7 +22,7 @@ yarn add tadaaa
 Import the function you need:
 
 ```ts
-import { throttle } from 'tadaa';
+import { throttle } from 'tadaaa';
 ```
 
 That's it.
@@ -36,7 +36,7 @@ The library exposes 2 functions:
 ### Throttle
 
 ```ts
-import { throttle } from 'tadaa';
+import { throttle } from 'tadaaa';
 
 const throttlingFunction = throttle(() => {
     // your code here
@@ -92,7 +92,7 @@ The returned function has 2 additional static methods:
 ### Debounce
 
 ```ts
-import { debounce } from 'tadaa';
+import { debounce } from 'tadaaa';
 
 const debouncingFunction = debounce(() => {
     // your code here
