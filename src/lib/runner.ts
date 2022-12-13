@@ -1,4 +1,5 @@
 export type RunnerHandler = () => void | Promise<void>;
+export type RunnerErrorHandler = (error: Error) => void;
 
 export interface Runner {
   run: (handler: RunnerHandler, milliseconds?: number) => void;
@@ -7,8 +8,6 @@ export interface Runner {
   readonly isRunning: boolean;
   readonly runsCount: number;
 }
-
-export type RunnerErrorHandler = (error: Error) => void;
 
 export function createRunner(): Runner {
   let errorHandler: RunnerErrorHandler = (error: Error): void => { throw error };

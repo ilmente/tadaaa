@@ -1,6 +1,5 @@
-import type { EventHandler, EventHandlerReturnType, EventOnLeadingEdgeType } from './lib/handler';
 import { createRunner, Runner, RunnerHandler, RunnerErrorHandler } from './lib/runner';
-import { throttle, ThrottleOptions } from './lib/throttle';
+import { throttle, ThrottleOptions, EventHandler, EventHandlerReturnType, EventOnLeadingEdgeType } from './lib/throttle';
 import { debounce, DebounceOptions } from './lib/debounce';
 import { wait } from './lib/wait';
 

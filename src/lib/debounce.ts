@@ -1,5 +1,5 @@
 import { createRunner, RunnerErrorHandler } from './runner';
-import type { EventHandler, EventHandlerReturnType, EventOnLeadingEdgeType } from './handler';
+import type { EventHandler, EventHandlerReturnType, EventOnLeadingEdgeType } from './throttle';
 
 export interface DebounceOptions<E extends EventOnLeadingEdgeType> {
   delay?: number;

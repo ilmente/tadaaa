@@ -1,5 +1,11 @@
 import { createRunner, RunnerErrorHandler } from './runner';
-import type { EventHandler, EventHandlerReturnType, EventOnLeadingEdgeType } from './handler';
+
+export type EventOnLeadingEdgeType = true | false | undefined;
+export type EventHandler = (...args: any[]) => any;
+export type EventHandlerReturnType<F extends EventHandler, E extends EventOnLeadingEdgeType> =
+  ReturnType<F> extends void ? void :
+  E extends true ? ReturnType<F> :
+  ReturnType<F> | undefined;
 
 export interface ThrottleOptions<E extends EventOnLeadingEdgeType> {
   delay?: number;
