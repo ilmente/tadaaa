@@ -74,6 +74,8 @@ export function throttle<
 ) {}
 ```
 
+#### Returned function
+
 The returned function *has the same signature as the hanlder*, but, if trailing, the returned value of that function might be `undefined`. This is because the returned function will always return a value by design (should you specify any - if `void`, ignore this) by caching the last call returned value and by feeding that to the skipped events. When trailing, the first returned value is `undefined` as no hanlder has been invoked yet. When leading, on the other hand, the handler is immediately called, so the ruturn type of the returned function does not contemplate `undefined` values.
 
 ```ts
@@ -108,10 +110,10 @@ const debouncingFunction = debounce(() => {
 ```
 
 Let's break it down. The `debounce` function takes 2 parameters:
-- handler: any function (any parameter or return value) that you want to moderate;
-- options: an optional object
-    - `delay`:
-    - `leading`:
+- `handler`: as in `throttle`;
+- `options`:
+    - `delay`: as in `throttle`;
+    - `leading`: as in `throttle`;
     - `onError`: as in `throttle`;
     - `timeout`: how long before the `debounce` fails because too many events are happening  within the delay and no handler is actually invoked; default is no timeout;
     - `onTimeout`: should you specify a timeout, this is the custom error handler for timeout errors that might happen.
@@ -135,6 +137,8 @@ export function debounce<
     options?: DebounceOptions<E>
 ) {}
 ```
+
+#### Returned function
 
 The returned function is the same as for `throttle`.
 
