@@ -1,3 +1,5 @@
+[![CI](https://github.com/ilmente/tadaaa/actions/workflows/main.yml/badge.svg)](https://github.com/ilmente/tadaaa/actions/workflows/main.yml)
+
 # Tadaaa!
 
 Throttle and debounce, again and again... but in full Typescript.
