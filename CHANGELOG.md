@@ -11,4 +11,4 @@ First iteration of `throttle` and `debounce`.
 - move event handler types in `./lib/event.ts`
 
 ## 0.1.1
-- fix typos on README
+- update README
