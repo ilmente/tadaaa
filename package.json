@@ -1,7 +1,7 @@
 {
   "name": "tadaaa",
-  "description": "Throttle and debounce, again and again...",
-  "version": "0.0.2",
+  "description": "Throttle and debounce, again and again... but in full Typescript.",
+  "version": "0.1.0",
   "packageManager": "yarn@3.2.4",
   "main": "dist/api.js",
   "license": "MIT",
@@ -14,12 +14,12 @@
     "url": "https://github.com/ilmente/tadaaa.git"
   },
   "keywords": [
+    "tadaaa",
     "throttle",
     "debounce",
-    "tadaaa",
+    "typescript",
     "timeout",
-    "event",
-    "typescript"
+    "event"
   ],
   "scripts": {
     "dev": "tsc -w",
