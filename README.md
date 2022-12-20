@@ -1,13 +1,26 @@
 # Tadaaa!
 
-*T*hrottle *a*nd *d*ebounce, *a*gain *a*nd *a*gain...
+Throttle and debounce, again and again... but in full Typescript.
 
 ## Reason
 
-Not a big one, really. It mostly started as an experiment, a way to challenge myself in understanding and developing some solid TS code.
-I picked up `thorttle` and `debounce` because I actually need them in several projects, and I thought: "Well, I might just develop them myself, according to my needs. It's gonna be both edifying and somewhat useful.".
+Not a big one, really. It mostly started as an experiment, a way to challenge myself in understanding and developing some solid typescript code.
+I picked up *throttle* and *debounce* because I actually need them in several projects, and I thought:
+"Well, I might just develop them myself, according to my needs. It's gonna be both edifying and somewhat useful.".
 
-I know there are plenty of libraries doing `thorttle` and `debounce`, but I had a very clear design in mind and  I wanted them to be TS native. And here is the result!
+I know there are plenty of libraries doing *throttle* and *debounce*, but I had a very clear design in mind and I wanted them to be typescript native.
+And here is the result!
+
+## Design goals
+
+- code must be native typescript;
+- *throttle* and *debounce* returned functions (*"handlers"*) have the same signature as their input handlers
+- handlers always return a value when invoked
+- handlers can be invoked on trailing or leading edge
+- handlers can be invoked regardless of the delay
+- handlers can be cancelled regardless of the delay
+- handlers provide a way to hanldle errors
+- *debounce* can trigger a timeout error if too many events happen within the delay
 
 ## Setup
 
@@ -22,7 +35,7 @@ yarn add tadaaa
 Import the function you need:
 
 ```ts
-import { throttle } from 'tadaa';
+import { throttle } from 'tadaaa';
 ```
 
 That's it.
@@ -30,116 +43,131 @@ That's it.
 ## API
 
 The library exposes 2 functions:
-- `throttle`
-- `debounce`
+- throttle
+- debounce
 
 ### Throttle
 
 ```ts
-import { throttle } from 'tadaa';
+import { throttle } from 'tadaaa';
 
-const throttlingFunction = throttle(() => {
-    // your code here
-}, {
+const throttlingFunction = throttle(
+  (/* any signature */) => {/* input handler */},
+  /* options */
+  {
     delay: 300,
     leading: true,
-    onError: (error) => {
-        // custom error handling logic
-    },
-});
+    onError: (error) => {/* error hanlder */},
+  }
+);
 ```
 
-Let's break it down. The `throttle` function takes 2 parameters:
-- `handler`: any function (any parameter or return value) that you want to moderate;
+Let's break it down. The *throttle* function takes 2 parameters:
+- `handler`: any function that you want to moderate;
 - `options`:
-    - `delay`: how many milliseconds between event calls; default is 0 - it behaves like a `setTimeout` and invoke the hanlder at the next browser event loop;
-    - `leading`: whether or not the `throttle` is on the trailing edge of the delay (default) or is on the leading edge;
-    - `onError`: custom error handler for errors that might happen in the handler (remember: the hanlder is executed in a `setTimeout` and a simple `try/catch` won't be able to catch that error).
+  - `delay`: how long (in milliseconds) before allowing the next input `handler` to be invoked; default value is `0` and it behaves like a `setTimeout 0` by invoking the `hanlder` at the next browser event loop
+  - `leading`: whether or not the input `handler` should be invoked on the *leading* edge of the delay; default value is `false` and the `handler` is invoked on the *trailing* edge
+  - `onError`: custom error handler for errors that might happen in the input `handler`
 
 ```ts
 interface ThrottleOptions<
-    E extends EventOnLeadingEdgeType
+  E extends EventOnLeadingEdgeType
 > {
-    delay?: number;
-    leading?: E;
-    onError?: RunnerErrorHandler,
+  delay?: number;
+  leading?: E;
+  onError?: RunnerErrorHandler,
 }
 
-export function throttle<
-    H extends EventHandler = any,
-    E extends EventOnLeadingEdgeType = undefined
+function throttle<
+  H extends EventHandler = any,
+  E extends EventOnLeadingEdgeType = undefined
 > (
-    handler: H,
-    options?: ThrottleOptions<E>
-) {}
+  handler: H,
+  options?: ThrottleOptions<E>
+): SuperEventHandler<H, E> {}
 ```
 
-#### Returned function
+#### Returned function: **SuperEventHandler**
 
-The returned function *has the same signature as the hanlder*, but, if trailing, the returned value of that function might be `undefined`. This is because the returned function will always return a value by design (should you specify any - if `void`, ignore this) by caching the last call returned value and by feeding that to the skipped events. When trailing, the first returned value is `undefined` as no hanlder has been invoked yet. When leading, on the other hand, the handler is immediately called, so the ruturn type of the returned function does not contemplate `undefined` values.
+The returned function is called `SuperEventHandler` and **it has the same signature as the input hanlder**.
+
+Heads up: *when trailing*, the returned value of a `SuperEventHandler` might be `undefined`.
+This is because the `SuperEventHandler` will always return a value by design (should you specify any - if the input `handler` is `void`, ignore this) by *caching* the last returned value and by feeding it to every skipped event.
+When trailing, the first returned value of the `SuperEventHandler` is `undefined` as no hanlder has been invoked yet.
+
+*When leading*, on the other hand, the input `handler` is immediately invoked, thus the ruturn type of the `SuperEventHandler` does not contemplate `undefined` values.
 
 ```ts
 type EventHandlerReturnType<
-    F extends EventHandler,
-    E extends EventOnLeadingEdgeType
-> = ReturnType<F> extends void ? void : E extends true ? ReturnType<F> : ReturnType<F> | undefined;
+  H extends EventHandler,
+  E extends EventOnLeadingEdgeType
+> = ReturnType<H> extends void ? void : E extends true ? ReturnType<H> : ReturnType<H> | undefined;
 ```
 
-The returned function has 2 additional static methods:
-- `invoke`: calls the handler immediately, skipping any delay;
-- `cancel`: cancels the current delay and - if trailing, the execution of the last event.
+The `SuperEventHandler` has 2 additional methods:
+- `invoke`: calls the input `handler` immediately, skipping any `delay`
+- `cancel`: cancels the current `delay` and - if trailing, it does not invoke of the last due `handler`
+
+```ts
+type SuperEventHandler<
+  H extends EventHandler,
+  E extends EventOnLeadingEdgeType
+> = {
+  (...args: Parameters<H>): EventHandlerReturnType<H, E>;
+  invoke: (...args: Parameters<H>) => EventHandlerReturnType<H, E>;
+  cancel: () => void;
+};
+```
 
 ### Debounce
 
 ```ts
-import { debounce } from 'tadaa';
+import { debounce } from 'tadaaa';
 
-const debouncingFunction = debounce(() => {
-    // your code here
-}, {
+const debouncingFunction = debounce(
+  (/* any signature */) => {/* input handler */},
+  /* options */
+  {
     delay: 300,
     leading: true,
+    onError: (error) => {/* error hanlder */},
     timeout: 5000,
-    onTimeout: (timeoutError) => {
-        // custom timeout error handling logic
-    },
-    onError: (error) => {
-        // custom error handling logic
-    },
-});
+    onTimeout: (timeoutError) => {/* timeout error hanlder */},
+  }
+);
 ```
 
-Let's break it down. The `debounce` function takes 2 parameters:
-- `handler`: as in `throttle`;
+Let's break it down. The *debounce* function takes 2 parameters:
+- `handler`: as in *throttle*
 - `options`:
-    - `delay`: as in `throttle`;
-    - `leading`: as in `throttle`;
-    - `onError`: as in `throttle`;
-    - `timeout`: how long before the `debounce` fails because too many events are happening  within the delay and no handler is actually invoked; default is no timeout;
-    - `onTimeout`: should you specify a timeout, this is the custom error handler for timeout errors that might happen.
+  - `delay`: how many milliseconds must pass between handlers being invoked; default as in *throttle*
+  - `leading`: as in *throttle*
+  - `onError`: as in *throttle*
+  - `timeout`: how long (in milliseconds) before the *debounce* fails because too many events are happening within the `delay` and no `handler` is actually invoked; default is no timeout set
+  - `onTimeout`: should you specify a timeout, this is the custom error handler for timeout errors that might happen
 
 ```ts
-export interface DebounceOptions<
-    E extends EventOnLeadingEdgeType
+interface DebounceOptions<
+  E extends EventOnLeadingEdgeType
 > {
-    delay?: number;
-    leading?: E;
-    timeout?: number;
-    onTimeout?: RunnerErrorHandler,
-    onError?: RunnerErrorHandler,
+  delay?: number;
+  leading?: E;
+  timeout?: number;
+  onTimeout?: RunnerErrorHandler,
+  onError?: RunnerErrorHandler,
 }
 
-export function debounce<
-    H extends EventHandler = any,
-    E extends EventOnLeadingEdgeType = undefined
+function debounce<
+  H extends EventHandler = any,
+  E extends EventOnLeadingEdgeType = undefined
 > (
-    handler: H,
-    options?: DebounceOptions<E>
-) {}
+  handler: H,
+  options?: DebounceOptions<E>
+): SuperEventHandler<H, E> {}
 ```
 
-#### Returned function
+#### Returned function: **SuperEventHandler**
 
-The returned function is the same as for `throttle`.
+The returned `SuperEventHandler` behaves in the same way as for *throttle*.
 
 

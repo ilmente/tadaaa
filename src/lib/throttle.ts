@@ -1,11 +1,5 @@
+import type { EventHandler, EventHandlerReturnType, EventOnLeadingEdgeType, SuperEventHandler } from './event';
 import { createRunner, RunnerErrorHandler } from './runner';
-
-export type EventOnLeadingEdgeType = true | false | undefined;
-export type EventHandler = (...args: any[]) => any;
-export type EventHandlerReturnType<F extends EventHandler, E extends EventOnLeadingEdgeType> =
-  ReturnType<F> extends void ? void :
-  E extends true ? ReturnType<F> :
-  ReturnType<F> | undefined;
 
 export interface ThrottleOptions<E extends EventOnLeadingEdgeType> {
   delay?: number;
@@ -13,10 +7,10 @@ export interface ThrottleOptions<E extends EventOnLeadingEdgeType> {
   onError?: RunnerErrorHandler,
 }
 
-export function throttle<H extends EventHandler = any, E extends EventOnLeadingEdgeType = undefined>(
+export function throttle<H extends EventHandler = any, E extends EventOnLeadingEdgeType = false>(
   handler: H,
   options?: ThrottleOptions<E>
-) {
+): SuperEventHandler<H, E> {
   const isOnLeadingEdge = Boolean(options?.leading);
   const delay = createRunner();
   let invokeHandler: () => void;

@@ -1,5 +1,5 @@
+import type { EventHandler, EventHandlerReturnType, EventOnLeadingEdgeType, SuperEventHandler } from './event';
 import { createRunner, RunnerErrorHandler } from './runner';
-import type { EventHandler, EventHandlerReturnType, EventOnLeadingEdgeType } from './throttle';
 
 export interface DebounceOptions<E extends EventOnLeadingEdgeType> {
   delay?: number;
@@ -9,10 +9,10 @@ export interface DebounceOptions<E extends EventOnLeadingEdgeType> {
   onError?: RunnerErrorHandler,
 }
 
-export function debounce<H extends EventHandler = any, E extends EventOnLeadingEdgeType = undefined>(
+export function debounce<H extends EventHandler = any, E extends EventOnLeadingEdgeType = false>(
   handler: H,
   options?: DebounceOptions<E>
-) {
+): SuperEventHandler<H, E> {
   const isOnLeadingEdge = Boolean(options?.leading);
   const delay = createRunner();
   const timeout = createRunner();
