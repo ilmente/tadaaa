@@ -9,3 +9,6 @@ First iteration of `throttle` and `debounce`.
 - add more meta information on `package.json`
 - add `SuperEventHandler` type to both code and README
 - move event handler types in `./lib/event.ts`
+
+## 0.1.1
+- fix typos on README

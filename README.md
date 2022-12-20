@@ -60,10 +60,15 @@ const throttlingFunction = throttle(
     onError: (error) => {/* error hanlder */},
   }
 );
+
+// use it
+for (let i = 0; i < 1000000; i++) {
+  throttlingFunction();
+}
 ```
 
 Let's break it down. The *throttle* function takes 2 parameters:
-- `handler`: any function that you want to moderate;
+- `handler`: any function that you want to moderate
 - `options`:
   - `delay`: how long (in milliseconds) before allowing the next input `handler` to be invoked; default value is `0` and it behaves like a `setTimeout 0` by invoking the `hanlder` at the next browser event loop
   - `leading`: whether or not the input `handler` should be invoked on the *leading* edge of the delay; default value is `false` and the `handler` is invoked on the *trailing* edge
@@ -119,6 +124,8 @@ type SuperEventHandler<
 };
 ```
 
+---
+
 ### Debounce
 
 ```ts
@@ -135,6 +142,11 @@ const debouncingFunction = debounce(
     onTimeout: (timeoutError) => {/* timeout error hanlder */},
   }
 );
+
+// use it
+for (let i = 0; i < 1000000; i++) {
+  debouncingFunction();
+}
 ```
 
 Let's break it down. The *debounce* function takes 2 parameters:
