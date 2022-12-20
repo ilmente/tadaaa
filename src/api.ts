@@ -1,10 +1,12 @@
-import { throttle, ThrottleOptions, EventHandler, EventHandlerReturnType, EventOnLeadingEdgeType } from './lib/throttle';
+import type { EventHandler, EventHandlerReturnType, EventOnLeadingEdgeType, SuperEventHandler } from './lib/event';
+import { throttle, ThrottleOptions } from './lib/throttle';
 import { debounce, DebounceOptions } from './lib/debounce';
 
 export type {
   EventHandler,
   EventHandlerReturnType,
   EventOnLeadingEdgeType,
+  SuperEventHandler,
   ThrottleOptions,
   DebounceOptions
 }

@@ -1,12 +1,26 @@
 {
   "name": "tadaaa",
+  "description": "Throttle and debounce, again and again...",
   "version": "0.0.2",
   "packageManager": "yarn@3.2.4",
   "main": "dist/api.js",
+  "license": "MIT",
+  "author": {
+    "name": "Alessandro Bellini",
+    "url": "https://ilmente.com"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/ilmente/tadaaa.git"
   },
+  "keywords": [
+    "throttle",
+    "debounce",
+    "tadaaa",
+    "timeout",
+    "event",
+    "typescript"
+  ],
   "scripts": {
     "dev": "tsc -w",
     "build": "rollup --config --environment BUILD:production",
