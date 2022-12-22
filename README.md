@@ -8,7 +8,7 @@ Throttle and debounce, again and again... but in full Typescript.
 
 Not a big one, really. It mostly started as an experiment, a way to challenge myself in understanding and developing some solid typescript code.
 I picked up *throttle* and *debounce* because I actually need them in several projects, and I thought:
-"Well, I might just develop them myself, according to my needs. It's gonna be both edifying and somewhat useful.".
+"Well, I might just develop them myself, according to my needs. It's gonna be both edifying and somewhat useful."
 
 I know there are plenty of libraries doing *throttle* and *debounce*, but I had a very clear design in mind and I wanted them to be typescript native.
 And here is the result!
@@ -86,7 +86,7 @@ interface ThrottleOptions<
 > {
   delay?: number;
   leading?: E;
-  onError?: RunnerErrorHandler,
+  onError?: RunnerErrorHandler;
 }
 
 function throttle<
@@ -171,8 +171,8 @@ interface DebounceOptions<
   delay?: number;
   leading?: E;
   timeout?: number;
-  onTimeout?: RunnerErrorHandler,
-  onError?: RunnerErrorHandler,
+  onTimeout?: RunnerErrorHandler;
+  onError?: RunnerErrorHandler;
 }
 
 function debounce<

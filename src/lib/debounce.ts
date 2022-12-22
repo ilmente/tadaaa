@@ -5,8 +5,8 @@ export interface DebounceOptions<E extends EventOnLeadingEdgeType> {
   delay?: number;
   leading?: E;
   timeout?: number;
-  onTimeout?: RunnerErrorHandler,
-  onError?: RunnerErrorHandler,
+  onTimeout?: RunnerErrorHandle;
+  onError?: RunnerErrorHandler;
 }
 
 export function debounce<H extends EventHandler = any, E extends EventOnLeadingEdgeType = false>(
