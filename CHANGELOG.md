@@ -12,3 +12,7 @@ First iteration of `throttle` and `debounce`.
 
 ## 0.1.1
 - update README
+
+## 0.1.2
+- update README
+- add bundle size analizers as dev dependencies

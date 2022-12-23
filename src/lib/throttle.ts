@@ -4,7 +4,7 @@ import { createRunner, RunnerErrorHandler } from './runner';
 export interface ThrottleOptions<E extends EventOnLeadingEdgeType> {
   delay?: number;
   leading?: E;
-  onError?: RunnerErrorHandler,
+  onError?: RunnerErrorHandler;
 }
 
 export function throttle<H extends EventHandler = any, E extends EventOnLeadingEdgeType = false>(
