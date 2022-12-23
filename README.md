@@ -103,7 +103,7 @@ function throttle<
 
 The returned function is called `SuperEventHandler` and *it has the same signature as the input handler*.
 It exposes 2 additional methods:
-- **invoke**: calls the input handler immediately, ignoring any delay; *it also has the same signature as the input handler*
+- **invoke**: calls the input handler immediately, ignoring any delay; *it also has the same signature as the input handler*. Additionally, it caches the returned value of the super handler, feeding it to every subsequent skipped event
 - **cancel**: cancels the current delay and - if trailing, it does not invoke of the last due handler
 
 ```ts
