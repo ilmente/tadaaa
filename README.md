@@ -19,7 +19,7 @@ And here is the result!
 - fully covered by tests
 - small footprint (~5kb, >1kb gzipped)
 - no external dependencies
-- performing, seriously
+- highly performing
 - *throttle* and *debounce* return functions (*super handlers*) that:
   - have the same signature as the input handlers
   - always return a value when invoked
@@ -31,7 +31,7 @@ And here is the result!
 
 ## Setup
 
-Add the dependency to your package manager of choice:
+Add the dependency using your package manager of choice:
 
 ```bash
 npm install tadaaa
@@ -39,7 +39,7 @@ npm install tadaaa
 yarn add tadaaa
 ```
 
-Import the function you need:
+Import the function(s) you need:
 
 ```ts
 import { throttle, debounce } from 'tadaaa';
