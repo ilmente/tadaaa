@@ -19,6 +19,7 @@ And here is the result!
 - fully covered by tests
 - small footprint (~5kb, >1kb gzipped)
 - no external dependencies
+- performing, seriously
 - *throttle* and *debounce* return functions (*super handlers*) that:
   - have the same signature as the input handlers
   - always return a value when invoked
@@ -49,8 +50,8 @@ That's it.
 ## API
 
 The library exposes 2 functions:
-- *throttle*
-- *debounce*
+- [throttle](#throttle)
+- [debounce](#debounce)
 
 ### Throttle
 
@@ -74,11 +75,11 @@ for (let i = 0; i < 1000000; i++) {
 ```
 
 Let's break it down. The *throttle* function takes 2 parameters:
-- `handler`: any function that you want to moderate
-- `options`:
-  - `delay`: how long (in milliseconds) before allowing the next input `handler` to be invoked; default value is `0` and it behaves like a `setTimeout 0` by invoking the `hanlder` at the next browser event loop
-  - `leading`: whether or not the input `handler` should be invoked on the *leading* edge of the delay; default value is `false` and the `handler` is invoked on the *trailing* edge
-  - `onError`: custom error handler for errors that might happen in the input `handler`
+- **handler**: any function that you want to moderate
+- **options**:
+  - **delay**: interval (in milliseconds) between events being handled; default value is `0` and it behaves like a `setTimeout(handler, 0)` by invoking the hanlder at the next browser event loop
+  - **leading**: whether or not the input handler should be invoked on the *leading* edge of the delay; default value is `false` and the handler is invoked on the *trailing* edge
+  - **onError**: custom error handler for errors that might happen in the input handler
 
 ```ts
 interface ThrottleOptions<
@@ -103,10 +104,10 @@ function throttle<
 The returned function is called `SuperEventHandler` and **it has the same signature as the input hanlder**.
 
 Heads up: *when trailing*, the returned value of a `SuperEventHandler` might be `undefined`.
-This is because the `SuperEventHandler` will always return a value by design (should you specify any - if the input `handler` is `void`, ignore this) by *caching* the last returned value and by feeding it to every skipped event.
+This is because the `SuperEventHandler` will always return a value by design (should you specify any - if the input handler is `void`, ignore this) by *cacheing* the last returned value and by feeding it to every skipped event.
 When trailing, the first returned value of the `SuperEventHandler` is `undefined` as no hanlder has been invoked yet.
 
-*When leading*, on the other hand, the input `handler` is immediately invoked, thus the ruturn type of the `SuperEventHandler` does not contemplate `undefined` values.
+*When leading*, on the other hand, the input handler is immediately invoked, thus the ruturn type of the `SuperEventHandler` does not contemplate `undefined` values.
 
 ```ts
 type EventHandlerReturnType<
@@ -116,8 +117,8 @@ type EventHandlerReturnType<
 ```
 
 The `SuperEventHandler` has 2 additional methods:
-- `invoke`: calls the input `handler` immediately, skipping any `delay`
-- `cancel`: cancels the current `delay` and - if trailing, it does not invoke of the last due `handler`
+- **invoke**: calls the input handler immediately, skipping any delay
+- **cancel**: cancels the current delay and - if trailing, it does not invoke of the last due handler
 
 ```ts
 type SuperEventHandler<
@@ -156,13 +157,13 @@ for (let i = 0; i < 1000000; i++) {
 ```
 
 Let's break it down. The *debounce* function takes 2 parameters:
-- `handler`: as in *throttle*
-- `options`:
-  - `delay`: how many milliseconds must pass between being invoked; default as in *throttle*
-  - `leading`: as in *throttle*
-  - `onError`: as in *throttle*
-  - `timeout`: how long (in milliseconds) before the *debounce* fails because too many events are happening within the `delay` and no `handler` is actually invoked; default is no timeout set
-  - `onTimeout`: should you specify a timeout, this is the custom error handler for timeout errors that might happen
+- **handler**: as in [throttle](#throttle)
+- **options**:
+  - **delay**: how long (in milliseconds) before allowing the next event being handled; default as in [throttle](#throttle)
+  - **leading**: as in [throttle](#throttle)
+  - **onError**: as in [throttle](#throttle)
+  - **timeout**: how long (in milliseconds) before the *debounce* fails because too many events are happening within the delay and no handler is actually invoked; default is no timeout set
+  - **onTimeout**: should you specify a timeout, this is the custom error handler for timeout errors that might happen
 
 ```ts
 interface DebounceOptions<
@@ -186,6 +187,6 @@ function debounce<
 
 #### Returned function: **SuperEventHandler**
 
-The returned `SuperEventHandler` behaves in the same way as for *throttle*.
+The returned `SuperEventHandler` behaves in the same way as for [throttle](#returned-function-supereventhandler).
 
 
