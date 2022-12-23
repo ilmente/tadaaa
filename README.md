@@ -68,7 +68,7 @@ const throttlingFunction = throttle(
   }
 );
 
-// use it
+// example
 for (let i = 0; i < 1000000; i++) {
   throttlingFunction();
 }
@@ -101,7 +101,29 @@ function throttle<
 
 #### Returned function: **SuperEventHandler**
 
-The returned function is called `SuperEventHandler` and **it has the same signature as the input hanlder**.
+The returned function is called `SuperEventHandler` and *it has the same signature as the input handler*.
+It exposes 2 additional methods:
+- **invoke**: calls the input handler immediately, ignoring any delay; *it also has the same signature as the input handler*
+- **cancel**: cancels the current delay and - if trailing, it does not invoke of the last due handler
+
+```ts
+type SuperEventHandler<
+  H extends EventHandler,
+  E extends EventOnLeadingEdgeType
+> = {
+  (...args: Parameters<H>): EventHandlerReturnType<H, E>;
+  invoke: (...args: Parameters<H>) => EventHandlerReturnType<H, E>;
+  cancel: () => void;
+};
+
+// example
+const inputHandler = (arg: number): number => arg * 2;
+const superHandler = throttle(inputHandler);
+
+superHandler(1);          // invoke the inputHandler throttling
+superHandler.invoke(1);   // invoke the inputHandler immediately, with no delay
+superHandler.cancel();    // cancel the delay
+```
 
 Heads up: *when trailing*, the returned value of a `SuperEventHandler` might be `undefined`.
 This is because the `SuperEventHandler` will always return a value by design (should you specify any - if the input handler is `void`, ignore this) by *cacheing* the last returned value and by feeding it to every skipped event.
@@ -114,21 +136,6 @@ type EventHandlerReturnType<
   H extends EventHandler,
   E extends EventOnLeadingEdgeType
 > = ReturnType<H> extends void ? void : E extends true ? ReturnType<H> : ReturnType<H> | undefined;
-```
-
-The `SuperEventHandler` has 2 additional methods:
-- **invoke**: calls the input handler immediately, skipping any delay
-- **cancel**: cancels the current delay and - if trailing, it does not invoke of the last due handler
-
-```ts
-type SuperEventHandler<
-  H extends EventHandler,
-  E extends EventOnLeadingEdgeType
-> = {
-  (...args: Parameters<H>): EventHandlerReturnType<H, E>;
-  invoke: (...args: Parameters<H>) => EventHandlerReturnType<H, E>;
-  cancel: () => void;
-};
 ```
 
 ---
@@ -150,7 +157,7 @@ const debouncingFunction = debounce(
   }
 );
 
-// use it
+// example
 for (let i = 0; i < 1000000; i++) {
   debouncingFunction();
 }
