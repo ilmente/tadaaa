@@ -20,14 +20,14 @@ And here is the result!
 - small footprint (~5kb, >1kb gzipped)
 - no external dependencies
 - highly performing
-- *throttle* and *debounce* return functions (*super handlers*) that:
+- *throttle* and *debounce* should return functions (*super handlers*) that:
   - have the same signature as the input handlers
   - always return a value when invoked
   - can be invoked on trailing or leading edges
   - can be invoked regardless of the delay
   - can be cancelled anytime
 - *throttle* and *debounce* provide a way to handle errors
-  - *debounce* can trigger a timeout error if too many events happen within the delay
+  - *debounce* can also trigger a timeout error if too many events happen within the delay
 
 ## Setup
 
@@ -104,7 +104,7 @@ function throttle<
 The returned function is called `SuperEventHandler` and *it has the same signature as the input handler*.
 It exposes 2 additional methods:
 - **invoke**: calls the input handler immediately, ignoring any delay; *it also has the same signature as the input handler*. Additionally, it caches the returned value of the super handler, feeding it to every subsequent skipped event
-- **cancel**: cancels the current delay and - if trailing, it does not invoke of the last due handler
+- **cancel**: cancels the current delay and - if trailing - it does not invoke of the last due handler
 
 ```ts
 type SuperEventHandler<

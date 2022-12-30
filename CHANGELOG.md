@@ -2,12 +2,12 @@
 
 ## 0.0.1
 Initial version.
-First iteration of `throttle` and `debounce`.
+First iteration of *throttle* and *debounce*.
 
 ## 0.1.0
-- fix typos on README
+- update README
 - add more meta information on `package.json`
-- add `SuperEventHandler` type to both code and README
+- add `SuperEventHandler` type
 - move event handler types in `./lib/event.ts`
 
 ## 0.1.1
@@ -15,4 +15,7 @@ First iteration of `throttle` and `debounce`.
 
 ## 0.1.2
 - update README
-- add bundle size analizers as dev dependencies
+- add bundle size analyzers as dev dependencies
+
+## 0.1.3
+- update README
