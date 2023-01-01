@@ -19,5 +19,5 @@ First iteration of *throttle* and *debounce*.
 
 ## 0.2.0
 - update README
-- add context propagation for handlers
+- add context propagation for input handlers
   - add `EventHandlerContext` type for function scopes
