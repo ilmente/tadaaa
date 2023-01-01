@@ -1,4 +1,4 @@
-import type { EventHandler, EventHandlerReturnType, EventOnLeadingEdgeType, SuperEventHandler } from './event';
+import type { EventHandler, EventHandlerContext, EventHandlerReturnType, EventOnLeadingEdgeType, SuperEventHandler } from './event';
 import { createRunner, RunnerErrorHandler } from './runner';
 
 export interface ThrottleOptions<E extends EventOnLeadingEdgeType> {
@@ -16,8 +16,8 @@ export function throttle<H extends EventHandler = any, E extends EventOnLeadingE
   let invokeHandler: () => void;
   let returnValue: EventHandlerReturnType<H, E>;
 
-  function invokeHandlerAndCacheReturnValue(...args: Parameters<H>): EventHandlerReturnType<H, E> {
-    return returnValue = handler(...args);
+  function invokeHandlerAndCacheReturnValue<C extends EventHandlerContext>(context: C, args: Parameters<H>): EventHandlerReturnType<H, E> {
+    return returnValue = handler.apply(context, args);
   }
 
   delay.onError((error) => {
@@ -30,9 +30,9 @@ export function throttle<H extends EventHandler = any, E extends EventOnLeadingE
     options.onError(error);
   });
 
-  function superHandler(...args: Parameters<H>): EventHandlerReturnType<H, E> {
+  function superHandler<C extends EventHandlerContext = any>(this: C, ...args: Parameters<H>): EventHandlerReturnType<H, E> {
     invokeHandler = () => {
-      isOnLeadingEdge || invokeHandlerAndCacheReturnValue(...args);
+      isOnLeadingEdge || invokeHandlerAndCacheReturnValue<C>(this, args);
     }
 
     if (delay.isRunning) {
@@ -40,7 +40,7 @@ export function throttle<H extends EventHandler = any, E extends EventOnLeadingE
     }
 
     if (isOnLeadingEdge) {
-      invokeHandlerAndCacheReturnValue(...args);
+      invokeHandlerAndCacheReturnValue<C>(this, args);
     }
 
     delay.run(() => invokeHandler(), options?.delay);
@@ -48,8 +48,8 @@ export function throttle<H extends EventHandler = any, E extends EventOnLeadingE
     return returnValue;
   }
 
-  superHandler.invoke = (...args: Parameters<H>): EventHandlerReturnType<H, E> => {
-    return invokeHandlerAndCacheReturnValue(...args);
+  superHandler.invoke = function<C extends EventHandlerContext = any>(this: C, ...args: Parameters<H>): EventHandlerReturnType<H, E> {
+    return invokeHandlerAndCacheReturnValue<C>(this, args);
   }
 
   superHandler.cancel = (): void => {

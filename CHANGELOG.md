@@ -17,5 +17,7 @@ First iteration of *throttle* and *debounce*.
 - update README
 - add bundle size analyzers as dev dependencies
 
-## 0.1.3
+## 0.2.0
 - update README
+- add context propagation for handlers
+  - add `EventHandlerContext` type for function scopes

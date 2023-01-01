@@ -111,8 +111,8 @@ type SuperEventHandler<
   H extends EventHandler,
   E extends EventOnLeadingEdgeType
 > = {
-  (...args: Parameters<H>): EventHandlerReturnType<H, E>;
-  invoke: (...args: Parameters<H>) => EventHandlerReturnType<H, E>;
+  <C extends EventHandlerContext = any>(this: C, ...args: Parameters<H>): EventHandlerReturnType<H, E>;
+  invoke: <C extends EventHandlerContext = any>(this: C, ...args: Parameters<H>) => EventHandlerReturnType<H, E>;
   cancel: () => void;
 };
 
