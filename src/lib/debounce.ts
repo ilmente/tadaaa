@@ -1,11 +1,11 @@
-import type { EventHandler, EventHandlerReturnType, EventOnLeadingEdgeType, SuperEventHandler } from './event';
+import type { EventHandler, EventHandlerContext, EventHandlerReturnType, EventOnLeadingEdgeType, SuperEventHandler } from './event';
 import { createRunner, RunnerErrorHandler } from './runner';
 
 export interface DebounceOptions<E extends EventOnLeadingEdgeType> {
   delay?: number;
   leading?: E;
   timeout?: number;
-  onTimeout?: RunnerErrorHandle;
+  onTimeout?: RunnerErrorHandler;
   onError?: RunnerErrorHandler;
 }
 
@@ -18,8 +18,8 @@ export function debounce<H extends EventHandler = any, E extends EventOnLeadingE
   const timeout = createRunner();
   let returnValue: EventHandlerReturnType<H, E>;
 
-  function invokeHandlerAndCacheReturnValue(...args: Parameters<H>): EventHandlerReturnType<H, E> {
-    return returnValue = handler(...args);
+  function invokeHandlerAndCacheReturnValue<C extends EventHandlerContext>(context: C, args: Parameters<H>): EventHandlerReturnType<H, E> {
+    return returnValue = handler.apply(context, args);
   }
 
   function throwTimeoutError() {
@@ -48,7 +48,7 @@ export function debounce<H extends EventHandler = any, E extends EventOnLeadingE
     options.onTimeout(error);
   })
 
-  function superHandler(...args: Parameters<H>): EventHandlerReturnType<H, E> {
+  function superHandler<C extends EventHandlerContext = any>(this: C, ...args: Parameters<H>): EventHandlerReturnType<H, E> {
     if (timeout.runsCount > 0) {
       timeout.run(throwTimeoutError);
       return returnValue;
@@ -59,21 +59,21 @@ export function debounce<H extends EventHandler = any, E extends EventOnLeadingE
     }
 
     if (isOnLeadingEdge && !delay.isRunning) {
-      invokeHandlerAndCacheReturnValue(...args);
+      invokeHandlerAndCacheReturnValue<C>(this, args);
     }
 
     delay.cancel();
     delay.run(() => {
       timeout.cancel();
-      isOnLeadingEdge || invokeHandlerAndCacheReturnValue(...args);
+      isOnLeadingEdge || invokeHandlerAndCacheReturnValue<C>(this, args);
     }, options?.delay);
 
     return returnValue;
   }
 
-  superHandler.invoke = (...args: Parameters<H>): EventHandlerReturnType<H, E> => {
+  superHandler.invoke = function <C extends EventHandlerContext = any>(this: C, ...args: Parameters<H>): EventHandlerReturnType<H, E> {
     timeout.cancel();
-    return invokeHandlerAndCacheReturnValue(...args);
+    return invokeHandlerAndCacheReturnValue<C>(this, args);
   }
 
   superHandler.cancel = (): void => {
