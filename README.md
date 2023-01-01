@@ -49,6 +49,9 @@ That's it.
 
 ## API
 
+**Tadaaa honors semantic versioning.**
+If you want to see the evolution of API, BC breaks and new features, check the [changelog](CHANGELOG.md) or the [release history in Github](https://github.com/ilmente/tadaaa/releases).
+
 The library exposes 2 functions:
 - [throttle](#throttle)
 - [debounce](#debounce)
