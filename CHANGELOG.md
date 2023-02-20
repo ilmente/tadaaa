@@ -24,3 +24,6 @@ First iteration of *throttle* and *debounce*.
 
 ## 0.2.1
 - update README
+
+## 1.0.0
+- mark as production-ready
