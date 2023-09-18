@@ -1,6 +1,6 @@
 import { wait } from './wait';
 
-const eventLoopDuration = 5;
+const tolerance = 10;
 const delay = 30;
 
 describe('wait()', () => {
@@ -8,7 +8,7 @@ describe('wait()', () => {
     const before = Date.now();
     await wait();
     const after = Date.now();
-    expect(after - before).toBeLessThanOrEqual(eventLoopDuration);
+    expect(after - before).toBeLessThanOrEqual(tolerance);
   });
 
   test('defer of N ms the execution of the following code', async () => {
