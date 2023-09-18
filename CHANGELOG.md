@@ -27,3 +27,6 @@ First iteration of *throttle* and *debounce*.
 
 ## 1.0.0
 - mark as production-ready
+
+## 1.0.1
+- add more unit tests on throttle

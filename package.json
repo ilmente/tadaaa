@@ -1,7 +1,7 @@
 {
   "name": "tadaaa",
   "description": "Throttle and debounce, again and again... but in full Typescript.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "packageManager": "yarn@3.2.4",
   "main": "dist/api.js",
   "license": "MIT",

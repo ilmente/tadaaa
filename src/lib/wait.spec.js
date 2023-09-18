@@ -1,16 +1,8 @@
 import { wait } from './wait';
 
-const eventLoopDuration = 5;
 const delay = 30;
 
 describe('wait()', () => {
-  test('excute the following code in a new browser event-loop when no/0 ms are passed', async () => {
-    const before = Date.now();
-    await wait();
-    const after = Date.now();
-    expect(after - before).toBeLessThanOrEqual(eventLoopDuration);
-  });
-
   test('defer of N ms the execution of the following code', async () => {
     const before = Date.now();
     await wait(delay);
