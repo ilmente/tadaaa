@@ -19,7 +19,7 @@ function createFaultyObj(done) {
   return {
     fn: jest.fn((a) => a),
 
-    // this handler does not preserv the scope (anon function)
+    // this handler does not preserve the scope (anon function)
     wrongHandler: throttle((a) => this.fn(a), {
       delay: 30,
       onError: (error) => {
