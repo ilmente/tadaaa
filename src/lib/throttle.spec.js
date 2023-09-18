@@ -2,12 +2,24 @@ import { throttle } from './throttle';
 import { wait } from './wait';
 
 const heavyLoadCallsCount = 100000;
-let fn, obj;
+let fn;
+
+function createObj() {
+  return {
+    fn: jest.fn((a) => a),
+
+    // this handler preserved the scope
+    scopedHandler: throttle(function (a) {
+      return this.fn(a);
+    }, { delay: 30 }),
+  };
+}
 
 function createFaultyObj(done) {
   return {
     fn: jest.fn((a) => a),
 
+    // this handler does not preserv the scope (anon function)
     wrongHandler: throttle((a) => this.fn(a), {
       delay: 30,
       onError: (error) => {
@@ -20,14 +32,6 @@ function createFaultyObj(done) {
 
 beforeEach(() => {
   fn = jest.fn((a) => a);
-
-  obj = {
-    fn: jest.fn((a) => a),
-
-    scopedHandler: throttle(function (a) {
-      return this.fn(a);
-    }, { delay: 30 }),
-  };
 });
 
 describe('throttle()', () => {
@@ -149,6 +153,7 @@ describe('throttle()', () => {
   });
 
   test('throttle preserves the scope', async () => {
+    const obj = createObj();
     let result;
 
     result = obj.scopedHandler(1);
